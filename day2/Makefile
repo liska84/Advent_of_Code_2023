@@ -1,6 +1,6 @@
-NAME = day1
+NAME = day2
 
-SRC = main.cpp Calibration.cpp
+SRC = main.cpp Bag.cpp
 
 OBJ_DIR = obj/
 OBJ = $(SRC:.cpp=.o)

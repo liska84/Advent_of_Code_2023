@@ -8,7 +8,7 @@
 int Calibration::sum1 = 0;
 int Calibration::sum2 = 0;
 
-const std::map<std::string, std::string> Calibration::myMap = {
+const std::map<std::string, std::string> myMap = {
     {"one", "1"}, {"two", "2"}, {"three", "3"}, {"four", "4"},
         {"five", "5"}, {"six", "6"}, {"seven", "7"}, {"eight", "8"}, {"nine", "9"}
     };
