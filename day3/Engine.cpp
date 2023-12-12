@@ -5,6 +5,7 @@
 std::vector<std::vector<char>> Engine::input;
 std::vector<int> Engine::lonely;
 std::vector<int> Engine::adjacent;
+std::vector<int> Engine::adjacentMultiplications;
 
 void printInput(const std::vector<std::vector<char>>& input) {
 
@@ -17,6 +18,14 @@ void printInput(const std::vector<std::vector<char>>& input) {
 		std::cout << std::endl;
 		line++;
 	}
+}
+
+int Engine::sum(std::vector<int> vector) {
+	int s = 0;
+
+	for (auto &num : vector)
+		s += num;
+	return s;
 }
 
 void Engine::readInput(const std::string& inputFile) {
@@ -34,9 +43,7 @@ void Engine::readInput(const std::string& inputFile) {
 			input.push_back(str);
         }
         file.close();
-
 		printInput(input);
-
 	}
     else {
         std::cout << "Unable to open file";
@@ -81,24 +88,59 @@ void Engine::checkInput() {
 			}
 		}
 	}
-
-//	std::cout << "Lonely Numbers: ";
-//	for (const auto& number : lonely) {
-//		std::cout << number << " ";
-//	}
-//	std::cout << std::endl;
-//
-//	std::cout << "Adjacent Numbers: ";
-//	for (const auto& number : adjacent) {
-//		std::cout << number << " ";
-//	}
-//	std::cout << std::endl;
+	std::cout << sum(adjacent) << std::endl;
 }
 
-int Engine::sum() {
-	int s = 0;
+bool Engine::isAsteriskNear(int i, int j, int k, int r, int c) {
+	for(int a = std::max(0, j - 1); a < std::min(c, k + 1); ++a) {
+		if(i - 1 >= 0 && input[i - 1][a] == '*')
+			return true;
+		if(input[i][a] == '*')
+			return true;
+		if(i + 1 < r && input[i + 1][a] == '*')
+			return true;
+	}
+	return false;
+}
 
-	for (auto &num : adjacent)
-		s += num;
-	return s;
+void Engine::processInput() {
+	int r = input.size();
+	int c = input[0].size();
+	std::vector<std::vector<int>> adjs(r * c);
+
+	for(int i = 0; i < r; ++i) {
+		int j = 0;
+		while(j < c) {
+			if(!isdigit(input[i][j])) {
+				j++;
+				continue;
+			}
+			int k = j;
+			int numval = 0;
+			while(k < c && isdigit(input[i][k])) {
+				numval = 10 * numval + (input[i][k] - '0');
+				k++;
+			}
+			if(isAsteriskNear(i, j, k, r, c)) {
+				for(int a = std::max(0, j - 1); a < std::min(c, k + 1); ++a) {
+					if(i - 1 >= 0 && input[i - 1][a] == '*') {
+						adjs[(i - 1) * c + a].push_back(numval);
+					}
+					if(input[i][a] == '*') {
+						adjs[i * c + a].push_back(numval);
+					}
+					if(i + 1 < r && input[i + 1][a] == '*') {
+						adjs[(i + 1) * c + a].push_back(numval);
+					}
+				}
+			}
+			j = k;
+		}
+	}
+	for(auto & adj : adjs) {
+		if(adj.size() == 2) {
+			adjacentMultiplications.push_back(adj[0] * adj[1]);
+		}
+	}
+	std::cout << sum(adjacentMultiplications) << std::endl;
 }

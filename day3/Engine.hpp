@@ -12,14 +12,16 @@ public:
     static void readInput(const std::string& file);
 	static void checkInput();
 	static bool checker(int x, int y, int length);
-	static int sum();
-	static void checkGear();
-	static void checkGearInput();
+	static int sum(std::vector<int> vector);
+	static void processInput();
 
 private:
     static std::vector<std::vector<char>> input;
 	static std::vector<int> lonely;
 	static std::vector<int> adjacent;
+	static std::vector<int> adjacentMultiplications;
+	static bool isAsteriskNear(int i, int j, int k, int r, int c);
+
 };
 
 
